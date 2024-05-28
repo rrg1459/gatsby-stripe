@@ -1,16 +1,58 @@
 import React from "react"
 import { Link } from "gatsby"
 
-import { Layout, SEO } from "../components"
+import { Jumbo, SEO, Products } from "../components"
 
-const IndexPage = () => (
-  <Layout>
+// import styled from 'styled-components';
+
+export const query = graphql`
+  query GET_DATA {
+    allSite {
+      edges {
+        node {
+          siteMetadata {
+            description
+          }
+        }
+      }
+    }
+    allStripeSku {
+      edges {
+        node {
+          id
+          price
+          product {
+            name
+            metadata {
+              description
+              img
+              wear
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+const IndexPage = ({data}) => {
+  
+  console.log('xxx data-->: ', data);
+
+  return (
+  <Link>
     <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
+    <Jumbo
+        description={data.allSite.edges[0].node.siteMetadata.description}
+      />
+      <Products products={data.allStripeSku.edges} />
+
+    <br />
+    
     <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+    <br />
+    <Link to="/gracias/">Gracias</Link>
+  </Link>
+)}
 
 export default IndexPage
